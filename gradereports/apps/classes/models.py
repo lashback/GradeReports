@@ -13,8 +13,8 @@ class College(models.Model):
 
 class CollegeDetail(models.Model):
 	college = models.ForeignKey(College)
-	year = models.IntegerField(default = 0)
-	total_budget = models.IntegerField(default = 0)
+	term = models.CharField(max_length=10)
+	#total_budget = models.IntegerField(default = 0)
 	#and so on and so forth. Scraper!
 	
 class Department(models.Model):
@@ -32,20 +32,10 @@ class DepartmentDetail(models.Model):
 class Subject(models.Model):
 	name = models.CharField(max_length = 255)
 	code = models.CharField(max_length = 5)
-	#There's either this or the not this, but
-	#I don't really know what's going on with this.
-	#weiirrrdz.
-	#Anyway, I want to try and see if there's another way to 
-	#make this work meau betta 
-	#load department
-#so this is weird because...
-# 1. Course cross-listing.
-# 2. 
 
 class CourseSuper(models.Model):
 	name = models.CharField(max_length=255)
 	number = models.IntegerField(default = 0)
-	full_code = models.CharField(max_length=10)
 	subject = models.ForeignKey(Subject)
 	description = models.TextField()
 
@@ -65,7 +55,10 @@ class Course(models.Model):
 	#write out model methods that evaluate the stats we want on the course that semester.
 	#return the aver
 	def __unicode__(self):
-		return self.super_course 
+		return self.super_course.name
+
+	def save(self, *args, **kwargs):
+		super(Course, self).save(*args, **kwargs)		
 
 
 #ICES are released every semester.
@@ -103,35 +96,13 @@ class Section(models.Model):
 	#from scrape
 	#see /core/management/commands/do_it.py
 	course = models.ForeignKey(Course)
-	
-
 	sectionNumber = models.CharField(max_length = 10)
-	statusCode = models.CharField(max_length = 5, blank = True)
-	partOfTerm = models.CharField(max_length = 10, blank = True)
-	enrollment_status = models.CharField(max_length = 30, blank = True)
-	start_date = models.DateTimeField(blank = True)
-	end_date = models.DateTimeField(blank = True)
+	statusCode = models.CharField(max_length = 5, blank = True, null = True)
+	partOfTerm = models.CharField(max_length = 10, blank = True, null = True)
+	enrollment_status = models.CharField(max_length = 30, blank = True, null = True)
+	start_date = models.DateTimeField(blank = True, null = True)
+	end_date = models.DateTimeField(blank = True, null = True)
 	
-	
-
-	#the bread and butter of this hurr app
-
-class Meeting(models.Model):
-	typecode = models.CharField(max_length=200)
-	name = models.CharField(max_length=255)
-	section = models.ForeignKey(Section)
-
-	daysoftheweek = models.CharField(max_length=5, blank = True)
-
-	start = models.TimeField(blank = True)
-	end = models.TimeField(blank = True)
-
-	roomNumber = models.IntegerField(default = 0)
-	buildingName = models.CharField(max_length = 100, blank = True)
-
-	instructor = models.ManyToManyField(CourseInstructor)
-	
-	redacted = models.BooleanField(blank = True)
 
 	Aplus = models.IntegerField(default=0)
 	As = models.IntegerField(default=0)
@@ -147,3 +118,29 @@ class Meeting(models.Model):
 	Dminus = models.IntegerField(default=0)
 	F = models.IntegerField(default=0)
 	W = models.IntegerField(default=0)
+	
+	def save(self, *args, **kwargs):
+		super(Section, self).save(*args, **kwargs)		
+
+	#the bread and butter of this hurr app
+
+class Meeting(models.Model):
+	typecode = models.CharField(max_length=20)
+	section = models.ForeignKey(Section)
+
+	daysoftheweek = models.CharField(max_length=5, blank = True, null = True)
+
+	start = models.TimeField(blank = True,  null = True)
+	end = models.TimeField(blank = True, null = True)
+
+	roomNumber = models.CharField(max_length=20)
+	buildingName = models.CharField(max_length = 100, blank = True, null = True)
+
+	instructor = models.ManyToManyField(ProfSuper)
+	
+	redacted = models.BooleanField(default = True)
+
+	def save(self, *args, **kwargs):
+		super(Meeting, self).save(*args, **kwargs)		
+
+

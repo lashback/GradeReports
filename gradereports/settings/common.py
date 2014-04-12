@@ -17,10 +17,9 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'gradereports',
-        'PORT': '5433',
-        'HOST': '/tmp/',
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+	'NAME':'gradereports'
+
     }
 }
 
@@ -127,6 +126,7 @@ INSTALLED_APPS = (
     
     # External apps
     'gunicorn',
+    'south',
     
     # Project apps
     'apps.core',
