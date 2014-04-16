@@ -9,7 +9,7 @@ from time import strptime, strftime
 import time
 import datetime
 import thread
-
+import urllib2
 
 url = 'http://courses.illinois.edu/cisapp/explorer/schedule.xml'
 r = requests.get(url)
@@ -37,10 +37,11 @@ def get_subject_data(subject, year_label, term_label):
 	subject_label = subject.text
 	print subject_label
 	print subject_url
-	r4 = requests.get(subject_url)
+	#r4 = requests.get(subject_url)																									#REBUILD
+	r4 = urllib2.urlopen(subject_url)
 	print r4
 
-	soup4 = BeautifulStoneSoup(r4.text)
+	soup4 = BeautifulStoneSoup(r4)
 	print soup4
 	if soup4.find('ns2:subject') is not None:
 		course_list = soup4.find('ns2:subject').find('courses').findAll('course')
@@ -52,8 +53,9 @@ def get_subject_data(subject, year_label, term_label):
 		course_label = course.text
 		print course_label
 		print course_url
-		r5 = requests.get(course_url)
-		soup5 = BeautifulStoneSoup(r5.text)
+		#r5 = requests.get(course_url)																								#REBUILD
+		r5 = urllib2.urlopen(course_url)
+		soup5 = BeautifulStoneSoup(r5)
 		
 
 
@@ -111,8 +113,9 @@ def get_subject_data(subject, year_label, term_label):
 			section_label = section.text
 			print section_label
 			print section_url
-			r6 = requests.get(section_url)
-			soup6 = BeautifulStoneSoup(r6.text)
+			#r6 = requests.get(section_url)																							#REBUILD
+			r6 = urllib2.urlopen(section_url)
+			soup6 = BeautifulStoneSoup(r6)			
 
 			#some OCE courses don't have terms like WHAAAT
 
