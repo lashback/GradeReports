@@ -50,7 +50,7 @@ class Course(models.Model):
 	year = models.IntegerField()
 	term = models.CharField(max_length=20)
 	gened = models.ManyToManyField(GenEd)
-	sectionDegreeAttributes = models.CharField(max_length = 100)
+	sectionDegreeAttributes = models.CharField(max_length = 100, null = True, blank = True)
 
 	#write out model methods that evaluate the stats we want on the course that semester.
 	#return the aver
@@ -133,7 +133,7 @@ class Meeting(models.Model):
 	start = models.TimeField(blank = True,  null = True)
 	end = models.TimeField(blank = True, null = True)
 
-	roomNumber = models.CharField(max_length=20)
+	roomNumber = models.CharField(max_length=20, null = True, blank = True)
 	buildingName = models.CharField(max_length = 100, blank = True, null = True)
 
 	instructor = models.ManyToManyField(ProfSuper)
