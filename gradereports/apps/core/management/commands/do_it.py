@@ -38,7 +38,10 @@ def get_subject_data(subject, year_label, term_label):
 	print subject_label
 	print subject_url
 	#r4 = requests.get(subject_url)																									#REBUILD
+	random = urllib2.urlopen('http://dailyillini.com')
+	print random.read()
 	r4 = urllib2.urlopen(subject_url)
+
 	print r4
 
 	soup4 = BeautifulStoneSoup(r4)
