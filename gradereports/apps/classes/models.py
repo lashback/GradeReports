@@ -37,7 +37,7 @@ class CourseSuper(models.Model):
 	name = models.CharField(max_length=255)
 	number = models.IntegerField(default = 0)
 	subject = models.ForeignKey(Subject)
-	description = models.TextField()
+	description = models.TextField(null=True)
 
 class GenEd(models.Model):
 	description = models.CharField(max_length = 255)
@@ -68,6 +68,8 @@ class ProfSuper(models.Model):
 	first_initial = models.CharField(max_length = 1)
 	last_name = models.CharField(max_length = 255)
 
+	def save(self, *args, **kwargs):
+		super(ProfSuper, self).save(*args, **kwargs)		
 
 class CourseInstructor(models.Model):
 	identity = models.ForeignKey(ProfSuper)
@@ -119,6 +121,11 @@ class Section(models.Model):
 	F = models.IntegerField(default=0)
 	W = models.IntegerField(default=0)
 	
+
+	#DMI data:
+	#freshmen_sophomores = models.IntegerField(default = 0)
+	#juniors_seniors = models.IntegerField(default = 0)
+
 	def save(self, *args, **kwargs):
 		super(Section, self).save(*args, **kwargs)		
 
