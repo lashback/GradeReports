@@ -33,17 +33,21 @@ class Subject(models.Model):
 	name = models.CharField(max_length = 255)
 	code = models.CharField(max_length = 5)
 
+	def save(self, *args, **kwargs):
+		super(Subject, self).save(*args, **kwargs)		
+
+
 class CourseSuper(models.Model):
 	name = models.CharField(max_length=255)
 	number = models.IntegerField(default = 0)
 	subject = models.ForeignKey(Subject)
-	description = models.TextField(null=True)
+
 
 class GenEd(models.Model):
 	description = models.CharField(max_length = 255)
 	categoryID = models.CharField(max_length=10)
 	attribute = models.CharField(max_length = 50)
-	attributecode = models.CharField(max_length = 5)
+	attributecode = models.CharField(max_length = 10)
 
 class Course(models.Model):
 	super_course = models.ForeignKey(CourseSuper)
@@ -51,6 +55,7 @@ class Course(models.Model):
 	term = models.CharField(max_length=20)
 	gened = models.ManyToManyField(GenEd)
 	sectionDegreeAttributes = models.CharField(max_length = 100, null = True, blank = True)
+	description = models.TextField(null=True)
 
 	#write out model methods that evaluate the stats we want on the course that semester.
 	#return the aver
@@ -99,12 +104,13 @@ class Section(models.Model):
 	#see /core/management/commands/do_it.py
 	course = models.ForeignKey(Course)
 	sectionNumber = models.CharField(max_length = 10)
-	statusCode = models.CharField(max_length = 5, blank = True, null = True)
+	statusCode = models.CharField(max_length = 10, blank = True, null = True)
 	partOfTerm = models.CharField(max_length = 10, blank = True, null = True)
 	enrollment_status = models.CharField(max_length = 30, blank = True, null = True)
 	start_date = models.DateTimeField(blank = True, null = True)
 	end_date = models.DateTimeField(blank = True, null = True)
 	
+	primary_instructor = models.ForeignKey(ProfSuper, null = True)
 
 	Aplus = models.IntegerField(default=0)
 	As = models.IntegerField(default=0)
@@ -132,10 +138,10 @@ class Section(models.Model):
 	#the bread and butter of this hurr app
 
 class Meeting(models.Model):
-	typecode = models.CharField(max_length=20)
+	typecode = models.CharField(max_length=50, null = True)
 	section = models.ForeignKey(Section)
 
-	daysoftheweek = models.CharField(max_length=5, blank = True, null = True)
+	daysoftheweek = models.CharField(max_length=10, blank = True, null = True)
 
 	start = models.TimeField(blank = True,  null = True)
 	end = models.TimeField(blank = True, null = True)
