@@ -45,11 +45,13 @@ def prof_getter(full_name, section):
 		#instructors = m.instructor
 		for i in m.instructor.all():
 			print i
-			contenders.append(m.i)
+			contenders.append(i)
 	print contenders
 	name = HumanName(full_name)
 	print name
-	first_initial = name.first[0]
+	if len(name.first) > 0:
+		first_initial = name.first[0]
+	else: first_initial = name.first
 	print first_initial
 	prof_found = False
 	for p in contenders:
@@ -57,13 +59,17 @@ def prof_getter(full_name, section):
 			p.first_name = name.first
 			p.save()
 			prof_found = True
+			section.primary_instructor = p
+			section.save()
 	if not prof_found:
 		print "No Prof Found oh ruohruh"
+
 
 class Command(BaseCommand):
 	def handle(self, *args, **options):
 		working_dir = os.path.join(SITE_ROOT, '../data')
-		file_path = os.path.join(working_dir, 'allyears.csv')
+		#change this to make things go.
+		file_path = os.path.join(working_dir, 'fall2013.csv')
 
 		handle = csv.reader(open(file_path, 'rU'), delimiter=',')
 		handle.next()

@@ -26,7 +26,7 @@ class Command(BaseCommand):
 			#subject_list = subject_list[134:]
 			#print subject_list
 			print term_label
-			if term_label != "Spring 2013":
+			if term_label != "Spring 2005" and term_label != "Summer 2005":
 				for subject in subject_list:
 					get_subject_data(subject, year_label, term_label)
 
@@ -240,5 +240,5 @@ class Command(BaseCommand):
 #				thread.start_new_thread(get_this_party_started, (year,))	
 #			except Exception:
 #				import traceback; traceback.print_exc();
-			if int(year.text) < 2014:
+			if int(year.text) < 2006:
 				get_this_party_started(year)
